@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Input from "../Components/Input";
-
+import { fetchObjects } from "../Service/S3Service"; // Assuming you have a service to fetch objects from S3
 function S3Details() {
     const [credentials, setCredentials] = useState({
         accessId: '',
@@ -13,6 +13,17 @@ function S3Details() {
         const {name,value} = e.target;
         setCredentials({...credentials, [name]: value});
     }
+
+    async function connectS3(credentials) {
+        if (!credentials.accessId || !credentials.accessKey || !credentials.region || !credentials.bucketName) {
+            alert("Please fill in all fields");
+            return;
+        }
+        // Here you would typically call a function to connect to S3 using the credentials
+        console.log("Connecting to S3 with credentials:", credentials);
+         var objects=await fetchObjects(credentials);
+         console.log("Fetched objects:", objects);
+    }
   return (
     <div className="s3-details flex justify-center items-center overflow-hidden" style={{backgroundColor: '#0a0a0a'}}>
 
@@ -20,7 +31,7 @@ function S3Details() {
         <div>
             <h1 className="text-3xl font-bold text-center mb-1 text-white">AWS S3 Configuration</h1>
         </div>
-        <form action="" className="text-white p-4 m-4 rounded-lg shadow-md w-full max-w-md flex-col gap-4 flex">
+        <form onSubmit={(e) => { e.preventDefault(); connectS3(credentials); }} className="text-white p-4 m-4 rounded-lg shadow-md w-full max-w-md flex-col gap-4 flex">
            <label htmlFor="accessId" className="text-sm font-medium text-gray-300">Access ID:</label>
            <Input type="text" name="accessId" id="accessId" value={credentials.accessId} onChange={handleChange} />
            <label htmlFor="accessKey" className="text-sm font-medium text-gray-300">Access Key:</label>
@@ -30,7 +41,7 @@ function S3Details() {
            <label htmlFor="bucketName" className="text-sm font-medium text-gray-300">Bucket Name:</label>
            <Input name="bucketName" type="text" id="bucketName" value={credentials.bucketName} onChange={handleChange} />
            <div className="flex justify-center items-center mt-4">
-            <button type="submit" style={{backgroundColor: '#F97316'}} className="text-white w-full py-2 rounded-md">Connect to S3</button>
+            <button type="submit" style={{backgroundColor: '#F97316'}} className="text-white w-full py-2 rounded-md" >Connect to S3</button>
            </div>
         </form>
 
