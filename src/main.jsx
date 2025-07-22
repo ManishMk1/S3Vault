@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import Layout from './Layout.jsx'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -10,7 +11,13 @@ import {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Layout />,   // ✅ Layout wraps everything
+    children: [
+      {
+        path: "",
+        element: <App />,   // ✅ App will render inside <Outlet />
+      }
+    ]
   },
 ]);
 
