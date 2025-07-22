@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Input from "../Components/Input";
 import { fetchObjects } from "../Service/S3Service"; // Assuming you have a service to fetch objects from S3
+import Notify from "../Notification/Notifications";
+import { useNavigate } from "react-router";
 function S3Details() {
     const [credentials, setCredentials] = useState({
         accessId: '',
@@ -9,21 +11,21 @@ function S3Details() {
         bucketName: ''
     })
 
-    function handleChange(e) {
-        const {name,value} = e.target;
-        setCredentials({...credentials, [name]: value});
-    }
-
-    async function connectS3(credentials) {
-        if (!credentials.accessId || !credentials.accessKey || !credentials.region || !credentials.bucketName) {
-            alert("Please fill in all fields");
-            return;
+    const navigate = useNavigate();
+useEffect(() => {
+    // Check if credentials are already stored in localStorage  
+    const checkCredentials = async () => {
+        if(localStorage.getItem('s3Credentials')) {
+            const storedCredentials = JSON.parse(localStorage.getItem('s3Credentials'));
+            const response = await fetchObjects(storedCredentials);
+            if (response.status === 200) {
+                navigate('/lists'); 
+            }
         }
-        // Here you would typically call a function to connect to S3 using the credentials
-        console.log("Connecting to S3 with credentials:", credentials);
-         var objects=await fetchObjects(credentials);
-         console.log("Fetched objects:", objects);
-    }
+    };
+    checkCredentials();
+}, [navigate]);
+
   return (
     <div className="s3-details flex justify-center items-center overflow-hidden" style={{backgroundColor: '#0a0a0a'}}>
 
@@ -48,6 +50,30 @@ function S3Details() {
     </div>
     </div>
   )
+
+  function handleChange(e) {
+        const {name,value} = e.target;
+        setCredentials({...credentials, [name]: value});
+    }
+
+    async function connectS3(credentials) {
+        if (!credentials.accessId || !credentials.accessKey || !credentials.region || !credentials.bucketName) {
+            Notify(400,"Please fill in all fields");
+            return;
+        }
+        console.log("Connecting to S3 with credentials:", credentials);
+         var objects=await fetchObjects(credentials);
+         if (objects.status === 200) {
+            localStorage.setItem('s3Credentials', JSON.stringify(credentials));
+           Notify(objects.status,objects.message || "Objects fetched successfully");
+           
+         }else{
+            Notify(objects.status,objects.message || "Failed to fetch objects from S3");
+         }
+         console.log("Fetched objects:", objects);
+    }
+
+
 }
 
 export default S3Details

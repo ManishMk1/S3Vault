@@ -20,8 +20,7 @@ export  function S3Connect(credentials) {
       const response = await s3.send(command);
         return  ApiResponse(200, 'Objects fetched successfully', response.Contents);
     } catch (error) {
-      console.error('Error fetching S3 objects:', error);
-      return  ApiResponse(400, 'Error fetching S3 objects', null);
+      return  ApiResponse(500, 'Error fetching S3 objects', null);
     }
     
 }
