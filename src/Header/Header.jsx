@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 function Header() {
     const [validRequest, setValidRequest] = useState(false);
    const location = useLocation(); // 👈 get current path
+    const navigate = useNavigate();
 
     useEffect(() => {
         const credentials = JSON.parse(localStorage.getItem('s3Credentials')) || null;
@@ -28,10 +29,15 @@ function Header() {
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse "></div>
                     <div className="text-sm">{credentials.bucketName}</div>
                 </div>
-                <button className="text-sm bg-red-500 b-1 rounded-lg py-1 px-4">Disconnect</button>
+                <button className="text-sm bg-red-500 b-1 rounded-lg py-1 px-4" onClick={logout}>Disconnect</button>
             </div>}
         </header>
     )
+    function logout() {
+        localStorage.removeItem('s3Credentials');
+        setValidRequest(false);
+        navigate("/"); // Redirect to the home page
+    }
 }
 
 export default Header

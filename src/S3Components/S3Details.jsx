@@ -12,7 +12,7 @@ function S3Details() {
     })
 
     const navigate = useNavigate();
-useEffect(() => {
+    useEffect(() => {
     // Check if credentials are already stored in localStorage  
     const checkCredentials = async () => {
         if(localStorage.getItem('s3Credentials')) {
@@ -66,6 +66,7 @@ useEffect(() => {
          if (objects.status === 200) {
             localStorage.setItem('s3Credentials', JSON.stringify(credentials));
            Notify(objects.status,objects.message || "Objects fetched successfully");
+           navigate('/lists'); // Redirect to the lists page after successful connection
            
          }else{
             Notify(objects.status,objects.message || "Failed to fetch objects from S3");
