@@ -1,12 +1,32 @@
-# React + Vite
+# S3Vault
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**S3Vault** is a simple web interface to securely connect, browse, filter, upload, download, and manage files in an AWS S3 bucket using signed credentials. Built using React and Tailwind CSS, it provides an intuitive UI for developers or internal teams to interact with private S3 buckets.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔐 Connect to any S3 bucket using temporary credentials
+- 📂 Browse all files/folders in a bucket
+- 🔍 Filter objects by type (image, document, etc.) or prefix
+- ⬆️ Upload files using drag-and-drop
+- 📥 Download files directly or open in a new tab
+- 🗑️ Delete multiple files in batch
+- 🧪 Built-in testing with Swagger for APIs (backend)
+- 🌐 Supports public/private bucket access
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js >= 18
+- NPM or Yarn
+- AWS credentials with appropriate S3 permissions
+
+---
+
+### 🛠️ Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/ManishMk1/S3Vault.git
+cd S3Vault
