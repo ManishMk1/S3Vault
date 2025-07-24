@@ -131,26 +131,19 @@ export const deleteMultipleFilesFromS3 = async (credentials, fileNames) => {
         throw error;
       }
     }
+    export async function downloadMultipleFilesFromS3(credentials, fileNames) {
+      const s3 = S3Connect(credentials);
+      const downloadPromises = fileNames.map(async (fileName) => {
+        try {
+          const response = await downloadS3File(credentials, fileName);
+          console.log(`Downloaded ${fileName}:`, response);
+        } catch (error) {
+          console.error(`Error downloading ${fileName}:`, error);
+        }
+      });
 
-   export async function downloadS3Filee(credentials, objectKey) {
-  const s3 = S3Connect(credentials);
-  const getObjectCommand = new GetObjectCommand({
-    Bucket: credentials.bucketName,
-    Key: objectKey,
-  });
-
-  try {
-    const response = await s3.send(getObjectCommand);
-
-    if (response.Body instanceof ReadableStream) {
-      const blob = await new Response(response.Body).blob();
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank"); // Open the blob URL in a new tab
-    } else {
-      throw new Error("Unsupported S3 object body type.");
+      await Promise.all(downloadPromises);
+      return ApiResponse(200, 'Files downloaded successfully', null);
     }
-  } catch (error) {
-    console.error("Error fetching file from S3:", error);
-    throw error;
-  }
-}
+
+ 
