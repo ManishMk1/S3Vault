@@ -63,7 +63,7 @@ const Lists = () => {
           setObjects(response.data || []);
         }
       } else {
-        // navigate('/'); // Redirect to S3Details if no credentials are found
+        navigate('/'); // Redirect to S3Details if no credentials are found
       }
     };
     checkCredentials();
